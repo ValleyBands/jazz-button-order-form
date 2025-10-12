@@ -36,7 +36,9 @@
         input[type="text"],
         input[type="email"],
         input[type="tel"],
-        input[type="number"] {
+        input[type="number"],
+        /* Added select to apply base styling */
+        select { 
             width: 100%;
             padding: 12px;
             border: 1px solid #d1d5db; /* Light gray border */
@@ -47,7 +49,7 @@
             color: #1f2937; /* Dark text */
             transition: border-color 0.2s;
         }
-        input:focus {
+        input:focus, select:focus {
              border-color: #4f46e5; /* Highlight on focus */
              outline: none;
         }
@@ -176,7 +178,14 @@
                     <input type="text" id="studentName_1" name="studentName_1" required>
 
                     <label for="jazzBand_1">Jazz Band:</label>
-                    <input type="text" id="jazzBand_1" name="jazzBand_1" required>
+                    <select id="jazzBand_1" name="jazzBand_1" required>
+                        <option value="" disabled selected>Select Band</option>
+                        <option value="Basie band">Basie band</option>
+                        <option value="Ellington band">Ellington band</option>
+                        <option value="Jazz Orchestra">Jazz Orchestra</option>
+                        <option value="Jazz Ensemble">Jazz Ensemble</option>
+                        <option value="Studio Jazz">Studio Jazz</option>
+                    </select>
 
                     <label for="numButtons_1">Number of Buttons for Student 1:</label>
                     <input type="number" id="numButtons_1" name="numButtons_1" min="0" value="0" oninput="calculateTotal()" required>
@@ -270,7 +279,14 @@
                 <input type="text" id="studentName_${studentCounter}" name="studentName_${studentCounter}" required>
 
                 <label for="jazzBand_${studentCounter}">Jazz Band:</label>
-                <input type="text" id="jazzBand_${studentCounter}" name="jazzBand_${studentCounter}" required>
+                <select id="jazzBand_${studentCounter}" name="jazzBand_${studentCounter}" required>
+                    <option value="" disabled selected>Select Band</option>
+                    <option value="Basie band">Basie band</option>
+                    <option value="Ellington band">Ellington band</option>
+                    <option value="Jazz Orchestra">Jazz Orchestra</option>
+                    <option value="Jazz Ensemble">Jazz Ensemble</option>
+                    <option value="Studio Jazz">Studio Jazz</option>
+                </select>
 
                 <label for="numButtons_${studentCounter}">Number of Buttons for Student ${studentCounter}:</label>
                 <input type="number" id="numButtons_${studentCounter}" name="numButtons_${studentCounter}" min="0" value="0" oninput="calculateTotal()" required>
@@ -320,7 +336,14 @@
                     <input type="text" id="studentName_1" name="studentName_1" required>
 
                     <label for="jazzBand_1">Jazz Band:</label>
-                    <input type="text" id="jazzBand_1" name="jazzBand_1" required>
+                    <select id="jazzBand_1" name="jazzBand_1" required>
+                        <option value="" disabled selected>Select Band</option>
+                        <option value="Basie band">Basie band</option>
+                        <option value="Ellington band">Ellington band</option>
+                        <option value="Jazz Orchestra">Jazz Orchestra</option>
+                        <option value="Jazz Ensemble">Jazz Ensemble</option>
+                        <option value="Studio Jazz">Studio Jazz</option>
+                    </select>
 
                     <label for="numButtons_1">Number of Buttons for Student 1:</label>
                     <input type="number" id="numButtons_1" name="numButtons_1" min="0" value="0" oninput="calculateTotal()" required>
@@ -364,8 +387,9 @@
                     studentNameInput.focus();
                     isValid = false; return;
                 }
+                // Check the select value directly
                 if (!jazzBandInput.value.trim()) {
-                    showMessage('Jazz Band cannot be empty.', true);
+                    showMessage('Please select a Jazz Band.', true);
                     jazzBandInput.focus();
                     isValid = false; return;
                 }
