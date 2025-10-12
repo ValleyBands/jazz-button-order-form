@@ -401,6 +401,16 @@
                 return;
             }
 
+            // --- DEBUGGING: LOG THE PAYLOAD BEFORE SUBMISSION ---
+            console.log('--- Submitting Data Payload ---');
+            console.log('Structured Data:', data);
+            
+            const payload = new URLSearchParams(data).toString();
+            console.log('URL Encoded Payload:', payload);
+            console.log('-----------------------------');
+            // ----------------------------------------------------
+
+
             try {
                 // Use exponential backoff for API call reliability
                 let response;
@@ -417,7 +427,7 @@
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
                             // Send the data object converted to URL search parameters
-                            body: new URLSearchParams(data).toString() 
+                            body: payload // Use the pre-calculated payload
                         });
                         // Since mode is 'no-cors', we assume success if the fetch call doesn't throw a network error.
                         success = true;
@@ -434,8 +444,8 @@
                 }
 
                 if (success) {
-                    // Success message updated to reflect no immediate redirect.
-                    showMessage('Order submitted successfully! The order details have been recorded.', false);
+                    // Success message updated to reflect need for sheet verification.
+                    showMessage('Order data was successfully SENT to Google Script. Please verify data appears in your spreadsheet.', false);
                     form.reset();
                     resetStudentEntries(); // Reset dynamic form state
 
@@ -457,4 +467,3 @@
     </script>
 </body>
 </html>
-
