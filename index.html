@@ -434,14 +434,16 @@
                 }
 
                 if (success) {
-                    showMessage('Order submitted successfully! You will be redirected to Square for payment shortly.');
+                    // Success message updated to reflect no immediate redirect.
+                    showMessage('Order submitted successfully! The order details have been recorded.', false);
                     form.reset();
                     resetStudentEntries(); // Reset dynamic form state
 
-                    // Redirect to payment page after a short delay
-                    setTimeout(() => {
+                    // NOTE: Redirect to payment page is temporarily commented out per user request.
+                    /* setTimeout(() => {
                         window.location.href = BASE_PAYMENT_REDIRECT_URL;
                     }, 3000); // Redirect after 3 seconds
+                    */
                 }
 
             } catch (error) {
