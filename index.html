@@ -469,14 +469,14 @@
 
                 if (success) {
                     // Success message updated to reflect the imminent redirect
-                    showMessage('Order data successfully submitted. Opening payment link in new window in 3 seconds...', false);
-                    //form.reset();
-                    //resetStudentEntries(); // Reset dynamic form state
+                    showMessage('Order data successfully submitted. Email confirmation sent. Opening payment link in new window in 5 seconds...', false);
+                    form.reset();
+                    resetStudentEntries(); // Reset dynamic form state
 
                     // >>> PAYMENT REDIRECT RE-ENABLED TO OPEN IN A NEW WINDOW <<<
                     setTimeout(() => {
                         window.open(BASE_PAYMENT_REDIRECT_URL, '_blank');
-                    }, 3000); // Redirect after 3 seconds
+                    }, 5000); // Redirect after 5 seconds
                 }
 
             } catch (error) {
@@ -490,6 +490,7 @@
     </script>
 </body>
 </html>
+
 
 
 
