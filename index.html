@@ -468,16 +468,15 @@
                 }
 
                 if (success) {
-                    // Success message updated to reflect need for sheet verification.
-                    showMessage('Order data was successfully SENT to Google Script. Please verify data appears in your spreadsheet.', false);
-                    form.reset();
-                    resetStudentEntries(); // Reset dynamic form state
+                    // Success message updated to reflect the imminent redirect
+                    showMessage('Order data successfully submitted. Opening payment link in new window in 3 seconds...', false);
+                    //form.reset();
+                    //resetStudentEntries(); // Reset dynamic form state
 
-                    // NOTE: Redirect to payment page is temporarily commented out per user request.
-                    /* setTimeout(() => {
-                        window.location.href = BASE_PAYMENT_REDIRECT_URL;
+                    // >>> PAYMENT REDIRECT RE-ENABLED TO OPEN IN A NEW WINDOW <<<
+                    setTimeout(() => {
+                        window.open(BASE_PAYMENT_REDIRECT_URL, '_blank');
                     }, 3000); // Redirect after 3 seconds
-                    */
                 }
 
             } catch (error) {
@@ -491,4 +490,5 @@
     </script>
 </body>
 </html>
+
 
