@@ -1,2 +1,2 @@
 # band-button-order-form
-Valley Marchmasters Band Buttons Order Form
+Valley Jazz Band Buttons Order Form
