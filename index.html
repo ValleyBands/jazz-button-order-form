@@ -169,8 +169,8 @@
                     <label for="studentName_1">Student Name:</label>
                     <input type="text" id="studentName_1" name="studentName_1" required>
 
-                    <label for="instrument_1">Instrument:</label>
-                    <input type="text" id="instrument_1" name="instrument_1" required>
+                    <label for="jazzBand_1">Jazz Band:</label>
+                    <input type="text" id="jazzBand_1" name="jazzBand_1" required>
 
                     <label for="numButtons_1">Number of Buttons for Student 1:</label>
                     <input type="number" id="numButtons_1" name="numButtons_1" min="0" value="0" oninput="calculateTotal()" required>
@@ -264,8 +264,8 @@
                 <label for="studentName_${studentCounter}">Student Name:</label>
                 <input type="text" id="studentName_${studentCounter}" name="studentName_${studentCounter}" required>
 
-                <label for="instrument_${studentCounter}">Instrument:</label>
-                <input type="text" id="instrument_${studentCounter}" name="instrument_${studentCounter}" required>
+                <label for="jazzBand_${studentCounter}">Jazz Band:</label>
+                <input type="text" id="jazzBand_${studentCounter}" name="jazzBand_${studentCounter}" required>
 
                 <label for="numButtons_${studentCounter}">Number of Buttons for Student ${studentCounter}:</label>
                 <input type="number" id="numButtons_${studentCounter}" name="numButtons_${studentCounter}" min="0" value="0" oninput="calculateTotal()" required>
@@ -332,7 +332,7 @@
             document.querySelectorAll('.student-entry').forEach((entry, index) => {
                 const studentId = entry.getAttribute('data-student-id');
                 const studentNameInput = document.getElementById(`studentName_${studentId}`);
-                const instrumentInput = document.getElementById(`instrument_${studentId}`);
+                const jazzBandInput = document.getElementById(`jazzBand_${studentId}`);
                 const numButtonsInput = document.getElementById(`numButtons_${studentId}`);
 
                 // Client-side validation for student fields
@@ -341,9 +341,9 @@
                     studentNameInput.focus();
                     return; // Stop submission
                 }
-                if (!instrumentInput.value.trim()) {
-                    showMessage('Instrument cannot be empty.', true);
-                    instrumentInput.focus();
+                if (!jazzBandInput.value.trim()) {
+                    showMessage('Jazz Band cannot be empty.', true);
+                    jazzBandInput.focus();
                     return; // Stop submission
                 }
                 if (parseInt(numButtonsInput.value) <= 0) {
@@ -354,7 +354,7 @@
 
                 const studentData = {
                     name: studentNameInput.value,
-                    instrument: instrumentInput.value,
+                    jazzBand: jazzBandInput.value,
                     numButtons: numButtonsInput.value
                 };
                 students.push(studentData);
@@ -374,7 +374,7 @@
 
             // Replace with your deployed Google Apps Script Web App URL
             // IMPORTANT: You will get this URL after deploying your Google Apps Script (see instructions below)
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxBTqYYgMXiZI4COf6_i0K48hn5A9lZH__kUpDKSzhXpu8t50Fe3m3sXytXP_l3B_VOlw/exec'; // <<< IMPORTANT: REPLACE THIS!
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCH2qAky8y-ZibI22LOlgOEdF1U07Iit-d-HSfNHkTLlBMb1vPfi8Env1xGGlkjlKBNQ/exec'; // <<< IMPORTANT: REPLACE THIS!
 
             if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE') {
                 showMessage('Please deploy your Google Apps Script and replace SCRIPT_URL with its URL.', true);
@@ -402,8 +402,8 @@
                         <label for="studentName_1">Student Name:</label>
                         <input type="text" id="studentName_1" name="studentName_1" required>
 
-                        <label for="instrument_1">Instrument:</label>
-                        <input type="text" id="instrument_1" name="instrument_1" required>
+                        <label for="jazzBand_1">Jazz Band:</label>
+                        <input type="text" id="jazzBand_1" name="jazzBand_1" required>
 
                         <label for="numButtons_1">Number of Buttons for Student 1:</label>
                         <input type="number" id="numButtons_1" name="numButtons_1" min="0" value="0" oninput="calculateTotal()" required>
@@ -434,4 +434,5 @@
     </script>
 </body>
 </html>
+
 
