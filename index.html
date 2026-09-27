@@ -37,8 +37,7 @@
         input[type="email"],
         input[type="tel"],
         input[type="number"],
-        /* Added select to apply base styling */
-        select { 
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #d1d5db; /* Light gray border */
@@ -47,11 +46,11 @@
             box-sizing: border-box;
             font-size: 1rem;
             color: #1f2937; /* Dark text */
-            transition: border-color 0.2s;
+            background-color: #ffffff;
         }
         input:focus, select:focus {
-             border-color: #4f46e5; /* Highlight on focus */
-             outline: none;
+            border-color: #4f46e5; /* Highlight on focus */
+            outline: none;
         }
         input[type="number"] {
             -moz-appearance: textfield; /* Firefox */
@@ -62,11 +61,11 @@
             margin: 0;
         }
         .student-entry {
-            border: 1px dashed #a5b4fc; /* Light indigo dashed border */
+            border: 1px dashed #d1d5db;
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 16px;
-            background-color: #f5f6ff; /* Very light blue */
+            background-color: #f9fafb; /* Very light gray */
         }
         .remove-student-btn {
             background-color: #ef4444; /* Red */
@@ -140,17 +139,17 @@
 <body>
     <div class="container">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Jazz Band Button Order Form</h1>
-        <p class="text-gray-600 mb-8 text-center">Each button costs <span class="font-semibold text-indigo-600">$5.27</span>.</p>
+        <p class="text-gray-600 mb-8 text-center">Each button costs <span class="font-semibold text-indigo-600">$5.00</span>.</p>
 
         <div class="mb-8 text-center">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Button Example:</h2>
-            <!-- Updated the src to use the 'main' branch link. -->
             <img
                 src="https://raw.githubusercontent.com/ValleyBands/jazz-button-order-form/main/Mockup_Jazz.png"
                 alt="Example band button"
                 class="mx-auto rounded-full shadow-lg border-4 border-indigo-300 w-48 h-48 object-cover"
                 onerror="this.onerror=null;this.src='https://placehold.co/200x200/cccccc/000000?text=Band+Button';"
             >
+            <p class="text-sm text-gray-500 mt-2">Example Jazz Band Button</p>
         </div>
 
         <form id="bandOrderForm" class="space-y-4">
@@ -208,11 +207,14 @@
     </div>
 
     <script>
-    const PRICE_PER_BUTTON = 5.27;
+    const PRICE_PER_BUTTON = 5.00;
     let studentCounter = 1;
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybsRTM9rJUKFBnJqjDcpLgO34-T9pYeKtJi7HCJRECUjnysN0tZJIh_-6L3JJkOAMm/exec'; 
     const BASE_PAYMENT_REDIRECT_URL = 'https://checkout.square.site/merchant/44QXX4R2B839B/checkout/AWBE6FFXZQALGDPUHMAAC46C';
 
+    /**
+     * Automatically formats a phone number as ###-###-#### as the user types.
+     */
     function formatPhoneNumber(input) {
         let numbers = input.value.replace(/\D/g, '');
         let formattedNumber = '';
@@ -222,28 +224,40 @@
         input.value = formattedNumber;
     }
 
+    /**
+     * Calculates total cost dynamically for all student entries.
+     */
     function calculateTotal() {
         let overallTotal = 0;
         const numButtonsInputs = document.querySelectorAll('input[name^="numButtons_"]');
+
         numButtonsInputs.forEach(input => {
             const numberOfButtons = parseInt(input.value) || 0;
-            if (numberOfButtons < 0) input.value = 0;
-            overallTotal += numberOfButtons * PRICE_PER_BUTTON;
+            if (numberOfButtons < 0) {
+                input.value = 0;
+            }
+            overallTotal += (parseInt(input.value) || 0) * PRICE_PER_BUTTON;
         });
+
         document.getElementById('totalCost').textContent = `$${overallTotal.toFixed(2)}`;
         document.getElementById('hiddenTotalCost').value = overallTotal.toFixed(2);
     }
 
+    /**
+     * Dynamically adds a new student entry section.
+     */
     document.getElementById('addStudentBtn').addEventListener('click', () => {
         studentCounter++;
         const studentsContainer = document.getElementById('studentsContainer');
         const newStudentEntry = document.createElement('div');
         newStudentEntry.classList.add('student-entry');
         newStudentEntry.setAttribute('data-student-id', studentCounter);
+
         newStudentEntry.innerHTML = `
             <h3 class="text-lg font-medium text-gray-700 mb-2">Student ${studentCounter}</h3>
             <label for="studentName_${studentCounter}">Student Name:</label>
             <input type="text" id="studentName_${studentCounter}" name="studentName_${studentCounter}" required>
+
             <label for="jazzBand_${studentCounter}">Jazz Band:</label>
             <select id="jazzBand_${studentCounter}" name="jazzBand_${studentCounter}" required>
                 <option value="" disabled selected>Select Band</option>
@@ -252,33 +266,50 @@
                 <option value="Jazz Orchestra">Jazz Orchestra</option>
                 <option value="Jazz Ensemble">Jazz Ensemble</option>
             </select>
+
             <label for="numButtons_${studentCounter}">Number of Buttons for Student ${studentCounter}:</label>
             <input type="number" id="numButtons_${studentCounter}" name="numButtons_${studentCounter}" min="0" value="0" oninput="calculateTotal()" required>
+
             <button type="button" class="remove-student-btn" onclick="removeStudent(this)">Remove Student</button>
         `;
         studentsContainer.appendChild(newStudentEntry);
         calculateTotal();
     });
 
+    /**
+     * Removes a student entry section.
+     */
     function removeStudent(button) {
-        button.closest('.student-entry').remove();
-        calculateTotal();
+        const studentEntry = button.closest('.student-entry');
+        if (studentEntry) {
+            studentEntry.remove();
+            calculateTotal();
+        }
     }
 
+    /**
+     * Helper to show alert messages in the styled message box.
+     */
     function showMessage(message, isError = false) {
         const messageBox = document.getElementById('messageBox');
         messageBox.textContent = message;
         messageBox.style.display = 'block';
         messageBox.classList.toggle('error', isError);
-        setTimeout(() => messageBox.style.display = 'none', 3000);
+        setTimeout(() => {
+            messageBox.style.display = 'none';
+        }, 5000);
     }
 
+    /**
+     * Resets student entries back to 1 upon submission.
+     */
     function resetStudentEntries() {
         document.getElementById('studentsContainer').innerHTML = `
             <div class="student-entry" data-student-id="1">
                 <h3 class="text-lg font-medium text-gray-700 mb-2">Student 1</h3>
                 <label for="studentName_1">Student Name:</label>
                 <input type="text" id="studentName_1" name="studentName_1" required>
+
                 <label for="jazzBand_1">Jazz Band:</label>
                 <select id="jazzBand_1" name="jazzBand_1" required>
                     <option value="" disabled selected>Select Band</option>
@@ -287,6 +318,7 @@
                     <option value="Jazz Orchestra">Jazz Orchestra</option>
                     <option value="Jazz Ensemble">Jazz Ensemble</option>
                 </select>
+
                 <label for="numButtons_1">Number of Buttons for Student 1:</label>
                 <input type="number" id="numButtons_1" name="numButtons_1" min="0" value="0" oninput="calculateTotal()" required>
             </div>`;
@@ -294,6 +326,9 @@
         calculateTotal();
     }
 
+    /**
+     * Form submit handling with validation, posting to Apps Script, and redirect.
+     */
     document.getElementById('bandOrderForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -314,92 +349,85 @@
         const form = event.target;
         const formData = new FormData(form);
         const data = {};
+
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
         const students = [];
-        let isValid = true;
+        let validationFailed = false;
 
-        document.querySelectorAll('.student-entry').forEach(entry => {
-            if (!isValid) return;
-            const id = entry.getAttribute('data-student-id');
-            const name = document.getElementById(`studentName_${id}`);
-            const band = document.getElementById(`jazzBand_${id}`);
-            const num = document.getElementById(`numButtons_${id}`);
+        document.querySelectorAll('.student-entry').forEach((entry) => {
+            if (validationFailed) return;
 
-            if (!name.value.trim()) {
+            const studentId = entry.getAttribute('data-student-id');
+            const studentNameInput = document.getElementById(`studentName_${studentId}`);
+            const jazzBandInput = document.getElementById(`jazzBand_${studentId}`);
+            const numButtonsInput = document.getElementById(`numButtons_${studentId}`);
+
+            if (!studentNameInput.value.trim()) {
                 showMessage('Student name cannot be empty.', true);
-                name.focus();
-                isValid = false; return;
+                studentNameInput.focus();
+                validationFailed = true;
+                return;
             }
-            if (!band.value.trim()) {
+            if (!jazzBandInput.value) {
                 showMessage('Please select a Jazz Band.', true);
-                band.focus();
-                isValid = false; return;
+                jazzBandInput.focus();
+                validationFailed = true;
+                return;
             }
-            if (parseInt(num.value) <= 0) {
-                showMessage('Number of buttons must be greater than 0.', true);
-                num.focus();
-                isValid = false; return;
+            if (parseInt(numButtonsInput.value) <= 0) {
+                showMessage('Number of buttons for each student must be greater than 0.', true);
+                numButtonsInput.focus();
+                validationFailed = true;
+                return;
             }
 
-            students.push({ name: name.value, jazzBand: band.value, numButtons: num.value });
+            students.push({
+                name: studentNameInput.value,
+                jazzBand: jazzBandInput.value,
+                numButtons: numButtonsInput.value
+            });
         });
 
-        if (!isValid) {
+        if (validationFailed) {
             submitButton.disabled = false;
             submitButton.textContent = 'Submit Order and Pay Here';
             return;
         }
 
-        for (let [key, value] of formData.entries()) {
-            if (!key.startsWith('studentName_') && !key.startsWith('jazzBand_') && !key.startsWith('numButtons_')) {
-                data[key] = value;
-            }
-        }
-
         data['students'] = JSON.stringify(students);
 
-        const total = parseFloat(document.getElementById('hiddenTotalCost').value);
-        if (total <= 0) {
+        const currentTotal = parseFloat(document.getElementById('hiddenTotalCost').value);
+        if (currentTotal <= 0) {
             showMessage('Total number of buttons must be greater than $0.00.', true);
             submitButton.disabled = false;
             submitButton.textContent = 'Submit Order and Pay Here';
             return;
         }
 
-        const payload = new URLSearchParams(data).toString();
-
         try {
-            let response;
-            let success = false;
-            const maxRetries = 3;
-            let delay = 1000;
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    response = await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: payload
-                    });
-                    success = true;
-                    break;
-                } catch (error) {
-                    if (i < maxRetries - 1) {
-                        await new Promise(r => setTimeout(r, delay));
-                        delay *= 2;
-                    } else throw new Error('Submission failed after retries.');
-                }
-            }
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data).toString()
+            });
 
-            if (success) {
-                showMessage('Order submitted! Redirecting to payment...', false);
-                form.reset();
-                resetStudentEntries();
-                setTimeout(() => window.open(BASE_PAYMENT_REDIRECT_URL, '_blank'), 3000);
-            }
+            showMessage('Order submitted successfully! You will be redirected to Square for payment shortly.', false);
+            form.reset();
+            resetStudentEntries();
+
+            setTimeout(() => {
+                if (BASE_PAYMENT_REDIRECT_URL) {
+                    window.location.href = BASE_PAYMENT_REDIRECT_URL;
+                }
+            }, 3000);
 
         } catch (error) {
-            console.error('Error:', error);
-            showMessage('Error submitting form. Try again later.', true);
+            console.error('Error submitting form:', error);
+            showMessage('There was an error submitting your order. Please try again.', true);
         } finally {
             submitButton.disabled = false;
             submitButton.textContent = 'Submit Order and Pay Here';
@@ -410,6 +438,3 @@
 </script>
 </body>
 </html>
-
-
-
